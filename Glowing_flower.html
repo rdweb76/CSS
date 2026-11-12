@@ -1,0 +1,293 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Glowing Flower Animation</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            background: #0d1b1e;
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .night {
+            position: absolute;
+            inset: 0;
+            overflow: hidden;
+            background: radial-gradient(circle at 50% 100%, #153b38, #070e10 80%);
+        }
+
+        .flowers {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            gap: clamp(12px, 5vw, 40px);
+            transform: scale(0.8);
+            transform-origin: bottom center;
+        }
+
+        .flower {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Stem */
+        .flower__line {
+            position: relative;
+            width: 8px;
+            height: 0;
+            border-radius: 4px;
+            background: linear-gradient(to top, #0f4c3a, #208b6a);
+            animation: growStem 2s ease-out forwards;
+        }
+
+        .flower--1 .flower__line {
+            --stem-height: 350px;
+            animation-delay: 0.5s;
+        }
+
+        .flower--2 .flower__line {
+            --stem-height: 280px;
+            animation-delay: 0.9s;
+        }
+
+        .flower--3 .flower__line {
+            --stem-height: 300px;
+            animation-delay: 1.3s;
+        }
+
+        @keyframes growStem {
+            from { height: 0; }
+            to { height: var(--stem-height); }
+        }
+
+        /* Flower head */
+        .flower__head {
+            position: absolute;
+            left: 50%;
+            bottom: 100%;
+            width: 100px;
+            height: 100px;
+            transform: translateX(-50%) scale(0);
+            transform-origin: center bottom;
+            animation: bloom 1.5s ease-out forwards;
+            z-index: 3;
+        }
+
+        .flower--1 .flower__head { animation-delay: 2.5s; }
+        .flower--2 .flower__head { animation-delay: 2.9s; }
+        .flower--3 .flower__head { animation-delay: 3.3s; }
+
+        @keyframes bloom {
+            from {
+                transform: translateX(-50%) scale(0);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(-50%) scale(1);
+                opacity: 1;
+            }
+        }
+
+        /* Petals */
+        .petal {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            width: 25px;
+            height: 60px;
+            background: linear-gradient(to top, #ffffff, #a5f3fc);
+            border-radius: 50%;
+            transform-origin: center bottom;
+            box-shadow: 0 0 15px rgba(165, 243, 252, 0.6);
+        }
+
+        .petal:nth-child(2) { transform: translate(-50%, -100%) rotate(0deg); }
+        .petal:nth-child(3) { transform: translate(-50%, -100%) rotate(45deg); }
+        .petal:nth-child(4) { transform: translate(-50%, -100%) rotate(90deg); }
+        .petal:nth-child(5) { transform: translate(-50%, -100%) rotate(135deg); }
+        .petal:nth-child(6) { transform: translate(-50%, -100%) rotate(180deg); }
+        .petal:nth-child(7) { transform: translate(-50%, -100%) rotate(225deg); }
+        .petal:nth-child(8) { transform: translate(-50%, -100%) rotate(270deg); }
+        .petal:nth-child(9) { transform: translate(-50%, -100%) rotate(315deg); }
+
+        /* Flower center */
+        .flower__center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 30px;
+            height: 30px;
+            background: #eef8c0;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 0 20px #eef8c0, 0 0 40px #67e8f9;
+            z-index: 10;
+        }
+
+        /* Leaves */
+        .leaf {
+            position: absolute;
+            width: 30px;
+            height: 60px;
+            background: linear-gradient(to top, #115e59, #2dd4bf);
+            border-radius: 0 100% 0 100%;
+            opacity: 0;
+            animation: showLeaf 1s ease-out forwards;
+            z-index: 2;
+        }
+
+        .leaf--left {
+            left: -25px;
+            transform: rotate(-30deg);
+        }
+
+        .leaf--right {
+            right: -25px;
+            transform: scaleX(-1) rotate(-30deg);
+        }
+
+        .flower--1 .leaf { animation-delay: 2.1s; }
+        .flower--2 .leaf { animation-delay: 2.5s; }
+        .flower--3 .leaf { animation-delay: 2.9s; }
+
+        @keyframes showLeaf {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Fireflies */
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: #fef08a;
+            border-radius: 50%;
+            box-shadow: 0 0 10px #fef08a, 0 0 20px #fef08a;
+            animation: floatParticle linear infinite;
+        }
+
+        @keyframes floatParticle {
+            0% {
+                transform: translateY(0) scale(1);
+                opacity: 0;
+            }
+            50% { opacity: 1; }
+            100% {
+                transform: translateY(-400px) scale(0.2);
+                opacity: 0;
+            }
+        }
+
+        @media (max-width: 500px) {
+            .flowers {
+                transform: scale(0.58);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="night"></div>
+
+    <div class="flowers">
+
+        <!-- Flower 1 -->
+        <div class="flower flower--1">
+            <div class="flower__head">
+                <div class="flower__center"></div>
+                <div class="petal"></div>
+                <div class="petal"></div>
+                <div class="petal"></div>
+                <div class="petal"></div>
+                <div class="petal"></div>
+                <div class="petal"></div>
+                <div class="petal"></div>
+                <div class="petal"></div>
+            </div>
+
+            <div class="flower__line">
+                <div class="leaf leaf--left" style="top: 30%;"></div>
+                <div class="leaf leaf--right" style="top: 50%;"></div>
+            </div>
+        </div>
+
+        <!-- Flower 2 -->
+        <div class="flower flower--2">
+            <div class="flower__head">
+                <div class="flower__center"></div>
+                <div class="petal"></div>
+                <div class="petal"></div>
+                <div class="petal"></div>
+                <div class="petal"></div>
+                <div class="petal"></div>
+                <div class="petal"></div>
+                <div class="petal"></div>
+                <div class="petal"></div>
+            </div>
+
+            <div class="flower__line">
+                <div class="leaf leaf--left" style="top: 40%;"></div>
+                <div class="leaf leaf--right" style="top: 60%;"></div>
+            </div>
+        </div>
+
+        <!-- Flower 3 -->
+        <div class="flower flower--3">
+            <div class="flower__head">
+                <div class="flower__center"></div>
+                <div class="petal"></div>
+                <div class="petal"></div>
+                <div class="petal"></div>
+                <div class="petal"></div>
+                <div class="petal"></div>
+                <div class="petal"></div>
+                <div class="petal"></div>
+                <div class="petal"></div>
+            </div>
+
+            <div class="flower__line">
+                <div class="leaf leaf--left" style="top: 25%;"></div>
+                <div class="leaf leaf--right" style="top: 55%;"></div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        const night = document.querySelector('.night');
+        const particleCount = 40;
+
+        for (let i = 0; i < particleCount; i++) {
+            const particle = document.createElement('div');
+            particle.classList.add('particle');
+
+            particle.style.left = Math.random() * 100 + 'vw';
+            particle.style.top = (Math.random() * 50 + 50) + 'vh';
+            particle.style.animationDuration = (Math.random() * 3 + 3) + 's';
+            particle.style.animationDelay = (Math.random() * 5) + 's';
+
+            night.appendChild(particle);
+        }
+    </script>
+
+</body>
+</html>
